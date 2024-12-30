@@ -178,8 +178,5 @@ const sections = {
     return response;
   }
   
-  module.exports = {
-    sections,
-    getResponse
-  };
+ export { sections, getResponse };
 
