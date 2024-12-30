@@ -1,5 +1,5 @@
 const CONFIG = {
-    API_URL: 'http://localhost:3000',  // Adjust to your server URL
+    const API_URL = 'http://localhost:8000';,  // Adjust to your server URL
     MAX_RETRIES: 3,
     TIMEOUT: 5000  // 5 seconds timeout
 };
