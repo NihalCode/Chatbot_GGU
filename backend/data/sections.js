@@ -155,28 +155,27 @@ const sections = {
   };
   
   // Helper function to get response with media content
-  function getResponse(section, questionNumber) {
+ function getResponse(section, questionNumber) {
     if (!sections[section]) {
-      throw new Error('Invalid section');
+        throw new Error('Invalid section');
     }
-  
+
     const sectionData = sections[section];
     if (!sectionData.responses[questionNumber]) {
-      throw new Error('Invalid question number');
+        throw new Error('Invalid question number');
     }
-  
+
     const response = {
-      response: sectionData.responses[questionNumber]
+        response: sectionData.responses[questionNumber]
     };
-  
+
     // Add media content if available
     if (sectionData.media?.[questionNumber]) {
-      const { type, content } = sectionData.media[questionNumber];
-      response[type] = content;
+        const { type, content } = sectionData.media[questionNumber];
+        response[type] = content;
     }
-  
-    return response;
-  }
-  
- export { sections, getResponse };
 
+    return response;
+}
+
+export { sections, getResponse };
