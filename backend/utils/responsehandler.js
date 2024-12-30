@@ -1,6 +1,6 @@
 const { getMediaContent } = require('./mediaHandler');
-const { validateSection, validateQuestionNumber } = require('./validators');
-const sections = require('../data/sections');
+const { validateSection, validateQuestionNumber } = require('./validators.js');
+const sections = require('../data/sections.js');
 
 function getResponse(section, questionNumber) {
   // Validate inputs
