@@ -5,8 +5,7 @@ import { dirname, join } from 'path';
 import { sections } from './data/sections.js';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
+const __dirname = dirname(__filename);  
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -15,7 +14,7 @@ app.use(cors());
 app.use(express.json());
 
 // Serve static files - adjust the path to point to your frontend directory
-app.use(express.static(join(__dirname, '..'))); // This will serve files from the parent directory
+app.use(express.static(join(__dirname, '../src'))); // This will serve files from the parent directory
 
 // Log all requests
 app.use((req, res, next) => {
@@ -66,5 +65,5 @@ app.post('/chat', (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
-    console.log(`Serving static files from: ${join(__dirname, '..')}`);
+    console.log(`Serving static files from: ${join(__dirname, '../src')}`);
 });
