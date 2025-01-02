@@ -1,4 +1,4 @@
-const { getMediaContent } = require('./mediaHandler');
+const { getMediaContent } = require('./mediaHandler.js');
 const { validateSection, validateQuestionNumber } = require('./validators.js');
 const sections = require('../data/sections.js');
 
