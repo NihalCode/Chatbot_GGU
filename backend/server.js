@@ -25,7 +25,7 @@ app.use((req, res, next) => {
 
 // Serve index.html for the root route
 app.get('/', (req, res) => {
-    res.sendFile(join(__dirname, './src/index.html'));
+    res.sendFile(join(__dirname, '../src/index.html'));
 });
 
 // API routes
