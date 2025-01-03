@@ -63,7 +63,5 @@ app.post('/chat', (req, res) => {
     res.json(response);
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-    console.log(`Serving static files from: ${join(__dirname, '../src')}`);
-});
+// Vercel's handler export
+export default app;
