@@ -233,7 +233,7 @@
 
     <script>
         const CONFIG = {
-            API_URL: 'https://chatbot-ggu-8gy1.vercel.app/',  // Adjust to your server URL
+            API_URL: 'https://chatbot-ggu-8gy1.vercel.app',  // Adjust to your server URL
             MAX_RETRIES: 3,
             TIMEOUT: 5000  // 5 seconds timeout
         };
@@ -253,11 +253,11 @@
             const messagesDiv = document.getElementById('chatMessages');
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
-            
+
             if (isLoading && !isUser) {
                 messageDiv.classList.add('loading');
             }
-            
+
             messageDiv.textContent = text;
             messagesDiv.appendChild(messageDiv);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
@@ -266,7 +266,7 @@
 
         function appendMediaContent(mediaItems) {
             const messagesDiv = document.getElementById('chatMessages');
-            
+
             mediaItems.forEach(media => {
                 const mediaDiv = document.createElement('div');
                 mediaDiv.className = 'media-content';
@@ -290,7 +290,9 @@
             });
         }
 
-        async function fetchWithRetry(url, options = {}, retries = CONFIG.MAX_RETRIES) {
+        async function fetchWithRetry(endpoint, options = {}, retries = CONFIG.MAX_RETRIES) {
+            const url = `${CONFIG.API_URL}${endpoint}`;
+
             try {
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), CONFIG.TIMEOUT);
@@ -313,7 +315,7 @@
                 return response;
             } catch (error) {
                 if (retries > 0 && error.name === 'AbortError') {
-                    return fetchWithRetry(url, options, retries - 1);
+                    return fetchWithRetry(endpoint, options, retries - 1);
                 }
                 throw error;
             }
@@ -332,16 +334,16 @@
 
         async function selectSection(section) {
             if (isLoading) return;
-            
+
             try {
                 setLoading(true);
                 currentSection = section;
                 const select = document.getElementById('questionSelect');
                 select.style.display = 'block';
-                
+
                 appendMessage(`Selected section: ${section}`, true);
-                
-                const response = await fetchWithRetry(`${CONFIG.API_URL}/questions/${section}`);
+
+                const response = await fetchWithRetry(`/questions/${section}`);
                 const data = await response.json();
 
                 if (data.error) {
@@ -350,7 +352,7 @@
 
                 questions[section] = data.questions;
                 updateQuestionSelect(questions[section]);
-                
+
             } catch (error) {
                 console.error('Error:', error);
                 appendMessage('Error loading questions. Please try again.');
@@ -366,13 +368,13 @@
             if (!questionNumber || isLoading) return;
 
             const question = questions[currentSection][questionNumber - 1];
-            
+
             try {
                 setLoading(true);
                 appendMessage(question, true);
                 const loadingMessage = appendMessage('Loading response...');
-                
-                const response = await fetchWithRetry(`${CONFIG.API_URL}/chat`, {
+
+                const response = await fetchWithRetry(`/chat`, {
                     method: 'POST',
                     body: JSON.stringify({
                         section: currentSection,
@@ -391,7 +393,7 @@
                 if (data.images || data.videos) {
                     appendMediaContent(data.images || data.videos);
                 }
-                
+
             } catch (error) {
                 console.error('Error:', error);
                 appendMessage('Error getting response. Please try again.');
