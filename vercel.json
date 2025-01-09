@@ -10,18 +10,18 @@
       "use": "@vercel/static"
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/questions/(.*)",
-      "dest": "/backend/server.js"
+      "source": "/questions/(.*)",
+      "destination": "/backend/server.js"
     },
     {
-      "src": "/chat",
-      "dest": "/backend/server.js"
+      "source": "/chat",
+      "destination": "/backend/server.js"
     },
     {
-      "src": "/(.*)",
-      "dest": "/src/index.html"
+      "source": "/(.*)",
+      "destination": "/src/index.html"
     }
   ],
   "headers": [
