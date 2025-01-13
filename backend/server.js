@@ -17,11 +17,7 @@ const PORT = process.env.PORT || 3000;
 
 // Security configurations
 const allowedOrigins = [
-    'https://chatbot-ggu-7ubt.vercel.app',
-    'https://chatbot-ggu-8gy1.vercel.app',
-    'https://chatbot-ggu-wz45.vercel.app',
-    'http://localhost:3000',
-    'http://localhost:5000'
+    'http://localhost:3000'
 ];
 
 // Rate limiting
