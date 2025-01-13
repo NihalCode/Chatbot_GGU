@@ -9,43 +9,42 @@ const __dirname = dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Enhanced CORS configuration
+// Updated allowed origins to include all relevant domains
 const allowedOrigins = [
+    'https://chatbot-ggu-7ubt.vercel.app',  // Added the domain from the error
     'https://chatbot-ggu-8gy1.vercel.app',
     'https://chatbot-ggu-wz45.vercel.app',
     'http://localhost:3000',
     'http://localhost:5000'
 ];
 
-app.use(cors({
+// Consolidated CORS configuration
+const corsOptions = {
     origin: function (origin, callback) {
         // Allow requests with no origin (like mobile apps or curl requests)
         if (!origin) return callback(null, true);
         
-        if (allowedOrigins.indexOf(origin) === -1) {
-            const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-            return callback(new Error(msg), false);
+        // Check if the origin is in our allowedOrigins array
+        if (allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
         }
-        return callback(null, true);
     },
     methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Access-Control-Allow-Origin'],
     credentials: true,
     optionsSuccessStatus: 204
-}));
+};
 
+// Apply CORS middleware with options
+app.use(cors(corsOptions));
+
+// Remove the redundant CORS headers middleware since we're using the cors package
 app.use(express.json());
 
 // Pre-flight requests handling
-app.options('*', cors());
-
-// Set security headers
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    next();
-});
+app.options('*', cors(corsOptions));
 
 // Log all requests
 app.use((req, res, next) => {
@@ -90,7 +89,6 @@ app.post('/chat', async (req, res) => {
             response: sections[section].responses[questionNumber]
         };
         
-        // Add media content if available
         if (sections[section].media?.[questionNumber]) {
             const { type, content } = sections[section].media[questionNumber];
             response[type] = content;
@@ -114,10 +112,8 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: 'Something broke!' });
 });
 
-// Vercel's handler export
 export default app;
 
-// Start server if not running on Vercel
 if (process.env.NODE_ENV !== 'production') {
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
